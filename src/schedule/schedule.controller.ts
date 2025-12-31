@@ -1,6 +1,8 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
+import { FindScheduleDto } from './dto/find-schedule.dto';
 import { UpdateScheduleDto } from './dto/update-schedule.dto';
+import { Schedule } from './entities/schedule.entity';
 import { ScheduleService } from './schedule.service';
 
 @Controller('schedule')
@@ -8,27 +10,30 @@ export class ScheduleController {
 	constructor(private readonly scheduleService: ScheduleService) {}
 
 	@Post()
-	create(@Body() createScheduleDto: CreateScheduleDto) {
+	async create(@Body() createScheduleDto: CreateScheduleDto): Promise<Schedule> {
 		return this.scheduleService.create(createScheduleDto);
 	}
 
 	@Get()
-	findAll() {
-		return this.scheduleService.findAll();
+	async findAll(@Query() query: FindScheduleDto) {
+		return this.scheduleService.findAll(query);
 	}
 
 	@Get(':id')
-	findOne(@Param('id') id: string) {
-		return this.scheduleService.findOne(+id);
+	async findOne(@Param('id') id: string): Promise<Schedule | null> {
+		return this.scheduleService.findOne(id);
 	}
 
-	@Patch(':id')
-	update(@Param('id') id: string, @Body() updateScheduleDto: UpdateScheduleDto) {
-		return this.scheduleService.update(+id, updateScheduleDto);
+	@Put(':id')
+	async update(
+		@Param('id') id: string,
+		@Body() updateScheduleDto: UpdateScheduleDto,
+	): Promise<Schedule | null> {
+		return this.scheduleService.update(id, updateScheduleDto);
 	}
 
 	@Delete(':id')
-	remove(@Param('id') id: string) {
-		return this.scheduleService.remove(+id);
+	async remove(@Param('id') id: string): Promise<void> {
+		await this.scheduleService.remove(id);
 	}
 }
