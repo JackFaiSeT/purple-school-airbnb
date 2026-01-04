@@ -1,15 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, HydratedDocument } from 'mongoose';
-
-export const ROOM_TYPES = {
-	SINGLE: 'single',
-	DOUBLE: 'double',
-	SUITE: 'suite',
-} as const;
-
-export type RoomType = (typeof ROOM_TYPES)[keyof typeof ROOM_TYPES];
-
-export type RoomDocument = HydratedDocument<Room>;
+import { Document } from 'mongoose';
+import { ROOM_TYPES } from '../constants';
+import type { RoomType } from '../types';
 
 @Schema()
 export class Room extends Document {

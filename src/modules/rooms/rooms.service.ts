@@ -1,10 +1,10 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { ERRORS } from './constants';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
 import { Room } from './entities/room.entity';
-import { ROOM_ALREADY_EXISTS_ERROR, ROOM_NOT_FOUND_ERROR } from './rooms.constants';
 
 @Injectable()
 export class RoomsService {
@@ -17,7 +17,7 @@ export class RoomsService {
 			.exec();
 
 		if (existingRoom) {
-			throw new HttpException(ROOM_ALREADY_EXISTS_ERROR, HttpStatus.CONFLICT);
+			throw new HttpException(ERRORS.ROOM_ALREADY_EXISTS_ERROR, HttpStatus.CONFLICT);
 		}
 
 		const newRoom = new this.roomModel(createRoomDto);
@@ -33,7 +33,7 @@ export class RoomsService {
 		const room = await this.roomModel.findById(id).lean().exec();
 
 		if (!room) {
-			throw new HttpException(ROOM_NOT_FOUND_ERROR, HttpStatus.NOT_FOUND);
+			throw new HttpException(ERRORS.ROOM_NOT_FOUND_ERROR, HttpStatus.NOT_FOUND);
 		}
 
 		return room;
@@ -43,7 +43,7 @@ export class RoomsService {
 		const room = await this.roomModel.findOne({ roomNumber: roomNumber }).lean().exec();
 
 		if (!room) {
-			throw new HttpException(ROOM_NOT_FOUND_ERROR, HttpStatus.NOT_FOUND);
+			throw new HttpException(ERRORS.ROOM_NOT_FOUND_ERROR, HttpStatus.NOT_FOUND);
 		}
 
 		return room;
@@ -53,7 +53,7 @@ export class RoomsService {
 		const existingRoom = await this.roomModel.findById(id).lean().exec();
 
 		if (!existingRoom) {
-			throw new HttpException(ROOM_NOT_FOUND_ERROR, HttpStatus.NOT_FOUND);
+			throw new HttpException(ERRORS.ROOM_NOT_FOUND_ERROR, HttpStatus.NOT_FOUND);
 		}
 
 		if (updateRoomDto.roomNumber) {
@@ -66,7 +66,7 @@ export class RoomsService {
 				.exec();
 
 			if (duplicateRoom) {
-				throw new HttpException(ROOM_ALREADY_EXISTS_ERROR, HttpStatus.CONFLICT);
+				throw new HttpException(ERRORS.ROOM_ALREADY_EXISTS_ERROR, HttpStatus.CONFLICT);
 			}
 		}
 
@@ -79,7 +79,7 @@ export class RoomsService {
 		const deletedRoom = await this.roomModel.findByIdAndDelete(id).exec();
 
 		if (!deletedRoom) {
-			throw new HttpException(ROOM_NOT_FOUND_ERROR, HttpStatus.NOT_FOUND);
+			throw new HttpException(ERRORS.ROOM_NOT_FOUND_ERROR, HttpStatus.NOT_FOUND);
 		}
 	}
 
@@ -87,7 +87,7 @@ export class RoomsService {
 		const deletedRoom = await this.roomModel.findOneAndDelete({ roomNumber: roomNumber }).exec();
 
 		if (!deletedRoom) {
-			throw new HttpException(ROOM_NOT_FOUND_ERROR, HttpStatus.NOT_FOUND);
+			throw new HttpException(ERRORS.ROOM_NOT_FOUND_ERROR, HttpStatus.NOT_FOUND);
 		}
 	}
 }

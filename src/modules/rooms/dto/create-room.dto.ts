@@ -1,5 +1,6 @@
 import { IsBoolean, IsEnum, IsInt, IsOptional, IsPositive } from 'class-validator';
-import { ROOM_TYPES, type RoomType } from '../entities/room.entity';
+import { ROOM_TYPES } from '../constants';
+import type { RoomType } from '../types';
 
 export class CreateRoomDto {
 	@IsInt()

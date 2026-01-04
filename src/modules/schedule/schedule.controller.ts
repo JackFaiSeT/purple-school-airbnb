@@ -1,4 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
+import { ParseObjectIdPipe } from 'src/common/pipes/parse-object-id.pipe';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
 import { FindScheduleDto } from './dto/find-schedule.dto';
 import { UpdateScheduleDto } from './dto/update-schedule.dto';
@@ -20,20 +21,20 @@ export class ScheduleController {
 	}
 
 	@Get(':id')
-	async findOne(@Param('id') id: string): Promise<Schedule | null> {
+	async findOne(@Param('id', ParseObjectIdPipe) id: string): Promise<Schedule | null> {
 		return this.scheduleService.findOne(id);
 	}
 
 	@Put(':id')
 	async update(
-		@Param('id') id: string,
+		@Param('id', ParseObjectIdPipe) id: string,
 		@Body() updateScheduleDto: UpdateScheduleDto,
 	): Promise<Schedule | null> {
 		return this.scheduleService.update(id, updateScheduleDto);
 	}
 
 	@Delete(':id')
-	async remove(@Param('id') id: string): Promise<void> {
+	async remove(@Param('id', ParseObjectIdPipe) id: string): Promise<void> {
 		await this.scheduleService.remove(id);
 	}
 }

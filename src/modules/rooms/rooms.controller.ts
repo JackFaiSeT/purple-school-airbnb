@@ -1,4 +1,5 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
+import { ParseObjectIdPipe } from 'src/common/pipes/parse-object-id.pipe';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
 import { Room } from './entities/room.entity';
@@ -31,17 +32,17 @@ export class RoomsController {
 	}
 
 	@Get(':id')
-	async findOne(@Param('id') id: string): Promise<Room | null> {
+	async findOne(@Param('id', ParseObjectIdPipe) id: string): Promise<Room | null> {
 		return this.roomsService.findOne(id);
 	}
 
 	@Patch(':id')
-	async update(@Param('id') id: string, @Body() updateRoomDto: UpdateRoomDto) {
+	async update(@Param('id', ParseObjectIdPipe) id: string, @Body() updateRoomDto: UpdateRoomDto) {
 		return this.roomsService.update(id, updateRoomDto);
 	}
 
 	@Delete(':id')
-	async remove(@Param('id') id: string): Promise<void> {
+	async remove(@Param('id', ParseObjectIdPipe) id: string): Promise<void> {
 		await this.roomsService.remove(id);
 	}
 }

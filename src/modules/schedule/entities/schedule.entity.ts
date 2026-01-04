@@ -1,8 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, HydratedDocument, Schema as MSchema } from 'mongoose';
-import { Room } from 'src/rooms/entities/room.entity';
-
-export type ScheduleDocument = HydratedDocument<Schedule>;
+import { Document, Schema as MSchema } from 'mongoose';
+import { Room } from 'src/modules/rooms';
 
 @Schema()
 export class Schedule extends Document {

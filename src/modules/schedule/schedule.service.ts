@@ -1,11 +1,11 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { ERRORS } from './constants';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
 import { FindScheduleDto } from './dto/find-schedule.dto';
 import { UpdateScheduleDto } from './dto/update-schedule.dto';
 import { Schedule } from './entities/schedule.entity';
-import { ROOM_ALREADY_BOOKED_ERROR, SCHEDULE_NOT_FOUND_ERROR } from './schedule.constants';
 
 @Injectable()
 export class ScheduleService {
@@ -24,7 +24,7 @@ export class ScheduleService {
 			.exec();
 
 		if (existingSchedule) {
-			throw new HttpException(ROOM_ALREADY_BOOKED_ERROR, HttpStatus.CONFLICT);
+			throw new HttpException(ERRORS.ROOM_ALREADY_BOOKED_ERROR, HttpStatus.CONFLICT);
 		}
 
 		const createdSchedule = new this.scheduleModel({
@@ -61,7 +61,7 @@ export class ScheduleService {
 		const schedule = await this.scheduleModel.findById(id).lean().exec();
 
 		if (!schedule) {
-			throw new HttpException(SCHEDULE_NOT_FOUND_ERROR, HttpStatus.NOT_FOUND);
+			throw new HttpException(ERRORS.SCHEDULE_NOT_FOUND_ERROR, HttpStatus.NOT_FOUND);
 		}
 
 		return schedule;
@@ -81,7 +81,7 @@ export class ScheduleService {
 			.exec();
 
 		if (existingSchedule) {
-			throw new HttpException(ROOM_ALREADY_BOOKED_ERROR, HttpStatus.CONFLICT);
+			throw new HttpException(ERRORS.ROOM_ALREADY_BOOKED_ERROR, HttpStatus.CONFLICT);
 		}
 
 		const updatedSchedule = await this.scheduleModel
@@ -93,7 +93,7 @@ export class ScheduleService {
 			.exec();
 
 		if (!updatedSchedule) {
-			throw new HttpException(SCHEDULE_NOT_FOUND_ERROR, HttpStatus.NOT_FOUND);
+			throw new HttpException(ERRORS.SCHEDULE_NOT_FOUND_ERROR, HttpStatus.NOT_FOUND);
 		}
 
 		return updatedSchedule;
@@ -103,7 +103,7 @@ export class ScheduleService {
 		const deletedSchedule = await this.scheduleModel.findByIdAndDelete(id).exec();
 
 		if (!deletedSchedule) {
-			throw new HttpException(SCHEDULE_NOT_FOUND_ERROR, HttpStatus.NOT_FOUND);
+			throw new HttpException(ERRORS.SCHEDULE_NOT_FOUND_ERROR, HttpStatus.NOT_FOUND);
 		}
 	}
 }
