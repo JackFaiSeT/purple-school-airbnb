@@ -8,7 +8,7 @@ export class Room extends Document {
 	@Prop({ unique: true, required: true })
 	roomNumber: number;
 
-	@Prop({ required: true, enum: Object.values(ROOM_TYPES) })
+	@Prop({ required: true, enum: Object.values(ROOM_TYPES), type: String })
 	roomType: RoomType;
 
 	@Prop({ default: false })
